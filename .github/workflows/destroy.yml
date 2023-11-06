@@ -1,0 +1,36 @@
+name: CDK Destroy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  destroy:
+    permissions:
+      id-token: write
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_GITHUB_ACTIONS_ROLE }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Cache Node.js dependencies
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('./package-lock.json') }}
+      - name: Install CDK dependencies
+        working-directory: ./
+        run: npm ci
+        if: steps.cache.outputs.cache-hit != 'true'
+      - name: Destroy CDK stack
+        working-directory: ./
+        run: npx cdk destroy --all -f
