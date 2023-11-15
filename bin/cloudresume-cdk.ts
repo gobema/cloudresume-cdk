@@ -10,7 +10,7 @@ const app = new App();
 
 const dnsStack = new DnsStack(app, "DnsStack", {});
 
-const dnsStackDelete = new DnsStackDelete(app, "DnsDeleteStack", {
+const dnsStackDelete = new DnsStackDelete(app, "DnsStackDelete", {
   hostedZone: dnsStack.hostedZone
 });
 

@@ -38,7 +38,7 @@ export class AppRunnerStack extends Stack {
       cpu: AppRunnerAlpha.Cpu.QUARTER_VCPU,
       memory: AppRunnerAlpha.Memory.HALF_GB,
       source: AppRunnerAlpha.Source.fromGitHub({
-        repositoryUrl: "https://github.com/gobema/snippetbox_test",
+        repositoryUrl: "https://github.com/gobema/cloudresume",
         branch: "main",
         configurationSource: AppRunnerAlpha.ConfigurationSourceType.API,
         codeConfigurationValues: {
