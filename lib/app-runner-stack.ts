@@ -39,7 +39,7 @@ export class AppRunnerStack extends Stack {
       memory: AppRunnerAlpha.Memory.HALF_GB,
       source: AppRunnerAlpha.Source.fromGitHub({
         repositoryUrl: "https://github.com/gobema/cloudresume",
-        branch: "main",
+        branch: "instant-ramen",
         configurationSource: AppRunnerAlpha.ConfigurationSourceType.API,
         codeConfigurationValues: {
           runtime: AppRunnerAlpha.Runtime.GO_1,
