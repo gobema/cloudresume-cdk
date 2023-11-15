@@ -5,17 +5,7 @@ const certRecordType: string = "CNAME";
 const certRecordTTL: number = 300;
 const changeAction: string = "DELETE";
 
-/**
- * AWS Certificate Manager creates a CNAME resource record set for certificate validation through DNS.
- * Currently, ACM cannot delete this record, which blocks the deletion of the stack's hosted zone:
- * https://github.com/aws-cloudformation/cloudformation-coverage-roadmap/issues/837.
- * This function deletes the CNAME record created by ACM.
- */
-const deleteCertificateRecord = (
-  hostedZoneId: string,
-  name: string,
-  value: string,
-) =>
+const deleteRecord = (hostedZoneId: string, name: string, value: string) =>
   route53
     .changeResourceRecordSets({
       HostedZoneId: hostedZoneId,
@@ -52,5 +42,5 @@ export async function handler(event: any): Promise<any> {
   const certRecordName = certRecord?.Name as string;
   const value = certRecord?.ResourceRecords?.find(Boolean)?.Value as string;
 
-  await deleteCertificateRecord(hostedZoneId, certRecordName, value);
+  await deleteRecord(hostedZoneId, certRecordName, value);
 }

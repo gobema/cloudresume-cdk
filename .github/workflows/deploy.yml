@@ -46,4 +46,4 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
       - name: Deploy CDK stack
         working-directory: ./
-        run: RELEASE=${{ env.RELEASE_TAG }} npx cdk deploy --all --require-approval never
+        run: RELEASE=${{ env.RELEASE_TAG }} CONNECTION=${{ secrets.APP_RUNNER_CONNECTION }} npx cdk deploy --all --require-approval never

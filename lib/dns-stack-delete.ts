@@ -9,24 +9,24 @@ import {
 import { HostedZone } from "aws-cdk-lib/aws-route53";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 
-export interface CertStackDeleteProps extends StackProps {
+export interface DnsStackDeleteProps extends StackProps {
   hostedZone: HostedZone;
 }
 
-export class CertStackDelete extends Stack {
-  constructor(scope: App, id: string, props: CertStackDeleteProps) {
+export class DnsStackDelete extends Stack {
+  constructor(scope: App, id: string, props: DnsStackDeleteProps) {
     super(scope, id, props);
 
     const rootDomain = this.node.tryGetContext("rootDomain") as string;
 
-    this.deleteCertRecord(rootDomain, props.hostedZone);
+    this.deleteRecord(rootDomain, props.hostedZone);
   }
 
-  deleteCertRecord(domain: string, hostedZone: HostedZone) {
+  deleteRecord(domain: string, hostedZone: HostedZone) {
     const provider = new custom_resources.Provider(this, "Provider", {
       onEventHandler: new aws_lambda_nodejs.NodejsFunction(
         this,
-        "DeleteCertRecord",
+        "DeleteRecord",
         {
           initialPolicy: [
             new PolicyStatement({

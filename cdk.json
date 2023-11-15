@@ -65,7 +65,6 @@
     "dbName": "snippetbox",
     "dbUser": "web",
     "dbPort": 3306,
-    "containerPort": 4000,
-    "containerImage": "ghcr.io/gobema/cloudresume:"
+    "containerPort": "4000"
   }
 }

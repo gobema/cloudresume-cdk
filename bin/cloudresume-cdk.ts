@@ -1,42 +1,35 @@
 #!/usr/bin/env node
+import { AppRunnerStack } from "../lib/app-runner-stack";
 import { App } from "aws-cdk-lib";
-import { CertStackDelete } from "../lib/cert-stack-delete";
-import { CertStack } from "../lib/cert-stack";
 import { DnsStack } from "../lib/dns-stack";
-import { ECSStack } from "../lib/ecs-fargate-stack";
-import { RdsServerlessStack } from "../lib/rds-serverless-stack";
+import { RDSStack } from "../lib/rds-stack";
 import { VPCStack } from "../lib/vpc-stack";
+import { DnsStackDelete } from "../lib/dns-stack-delete";
 
 const app = new App();
 
 const dnsStack = new DnsStack(app, "DnsStack", {});
 
-const certStack = new CertStack(app, "CertStack", {
+const dnsStackDelete = new DnsStackDelete(app, "DnsDeleteStack", {
   hostedZone: dnsStack.hostedZone
 });
 
-const certStackDelete = new CertStackDelete(app, "CertStackDelete", {
-  hostedZone: dnsStack.hostedZone
-});
-
-certStackDelete.addDependency(certStack);
+dnsStackDelete.addDependency(dnsStack);
 
 const vpcStack = new VPCStack(app, "VPCStack", {
   maxAzs: 2
 });
 
-const rdsStack = new RdsServerlessStack(app, "RDSStack", {
+const rdsStack = new RDSStack(app, "RDSStack", {
   vpc: vpcStack.vpc
 });
 
 rdsStack.addDependency(vpcStack);
 
-const ecsStack = new ECSStack(app, "ECSStack", {
-  vpc: vpcStack.vpc,
-  dbSecretArn: rdsStack.dbSecret.secretArn,
-  cert: certStack.cert,
-  hostedZone: dnsStack.hostedZone
+const appRunnerStack = new AppRunnerStack(app, "AppRunnerStack", {
+  dbSecret: rdsStack.dbSecret,
+  hostedZone: dnsStack.hostedZone,
+  vpc: vpcStack.vpc
 });
 
-ecsStack.addDependency(rdsStack);
-ecsStack.addDependency(certStack);
+appRunnerStack.addDependency(rdsStack);
