@@ -36,6 +36,11 @@ export async function handler(event: any): Promise<any> {
   }
 
   const recordSetsList = await listResourceRecordSets(hostedZoneId);
+
+  if (recordSetsList.ResourceRecordSets.length < 3) {
+    return;
+  }
+
   const certRecord = recordSetsList.ResourceRecordSets.find(
     (r) => r.Type === certRecordType,
   );
