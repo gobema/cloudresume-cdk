@@ -20,7 +20,6 @@ export interface AppRunnerStackProps extends StackProps {
 }
 
 export class AppRunnerStack extends Stack {
-  // readonly serviceArn: string;
 
   constructor(scope: App, id: string, props: AppRunnerStackProps) {
     super(scope, id, props);

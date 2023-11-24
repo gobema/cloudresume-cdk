@@ -33,7 +33,7 @@ export class RDSStack extends Stack {
     const dbUser = this.node.tryGetContext("dbUser") as string;
 
     this.dbSecret = new Secret(this, "dbCredentialsSecret", {
-      secretName: "test/snippetbox/mariadb",
+      secretName: "snippetbox/mariadb",
       generateSecretString: {
         secretStringTemplate: JSON.stringify({
           username: dbUser,

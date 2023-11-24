@@ -1,11 +1,6 @@
 import { Construct } from "constructs";
 import { Stack, StackProps } from "aws-cdk-lib";
-import {
-  InterfaceVpcEndpointAwsService,
-  IpAddresses,
-  SubnetType,
-  Vpc,
-} from "aws-cdk-lib/aws-ec2";
+import { IpAddresses, SubnetType, Vpc } from "aws-cdk-lib/aws-ec2";
 
 export interface VpcProps extends StackProps {
   maxAzs: number;
@@ -21,7 +16,7 @@ export class VPCStack extends Stack {
       throw new Error("maxAzs must be at least 2.");
     }
 
-    this.vpc = new Vpc(this, "ecsVPC", {
+    this.vpc = new Vpc(this, "appRunnerVPC", {
       ipAddresses: IpAddresses.cidr("10.0.0.0/16"),
       natGateways: 0,
       subnetConfiguration: [
@@ -36,10 +31,6 @@ export class VPCStack extends Stack {
           subnetType: SubnetType.PRIVATE_ISOLATED,
         },
       ],
-    });
-
-    this.vpc.addInterfaceEndpoint("SecretsManagerEndpoint", {
-      service: InterfaceVpcEndpointAwsService.SECRETS_MANAGER,
     });
   }
 }
