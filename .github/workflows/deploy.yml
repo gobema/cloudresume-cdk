@@ -2,19 +2,6 @@ name: CDK Deploy
 
 on:
   workflow_dispatch:
-    inputs:
-      release_tag:
-        description: 'Container release tag'
-        default: 'latest'
-        required: false
-        type: string
-
-  push:
-    paths:
-      - cdk.json
-
-env:
-  RELEASE_TAG: ${{ inputs.release_tag || 'latest' }}
 
 jobs:
   deploy:
@@ -46,4 +33,4 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
       - name: Deploy CDK stack
         working-directory: ./
-        run: RELEASE=${{ env.RELEASE_TAG }} CONNECTION=${{ secrets.APP_RUNNER_CONNECTION }} npx cdk deploy --all --require-approval never
+        run: CONNECTION=${{ secrets.APP_RUNNER_CONNECTION }} npx cdk deploy --all --require-approval never

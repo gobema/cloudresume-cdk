@@ -20,10 +20,11 @@ export interface AppRunnerStackProps extends StackProps {
 }
 
 export class AppRunnerStack extends Stack {
-
   constructor(scope: App, id: string, props: AppRunnerStackProps) {
     super(scope, id, props);
 
+    const repositoryUrl = this.node.tryGetContext("repositoryUrl") as string;
+    const branch = this.node.tryGetContext("branch") as string;
     const containerPort = this.node.tryGetContext("containerPort") as string;
     const subDomain = this.node.tryGetContext("subDomain") as string;
 
@@ -37,8 +38,8 @@ export class AppRunnerStack extends Stack {
       cpu: AppRunnerAlpha.Cpu.QUARTER_VCPU,
       memory: AppRunnerAlpha.Memory.HALF_GB,
       source: AppRunnerAlpha.Source.fromGitHub({
-        repositoryUrl: "https://github.com/gobema/cloudresume",
-        branch: "instant-ramen",
+        repositoryUrl: repositoryUrl,
+        branch: branch,
         configurationSource: AppRunnerAlpha.ConfigurationSourceType.API,
         codeConfigurationValues: {
           runtime: AppRunnerAlpha.Runtime.GO_1,

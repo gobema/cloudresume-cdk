@@ -65,6 +65,8 @@
     "dbName": "snippetbox",
     "dbUser": "web",
     "dbPort": 3306,
+    "repositoryUrl": "https://github.com/gobema/cloudresume",
+    "branch": "instant-ramen",
     "containerPort": "4000"
   }
 }
