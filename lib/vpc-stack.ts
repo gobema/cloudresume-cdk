@@ -1,11 +1,6 @@
 import { Construct } from "constructs";
 import { Stack, StackProps } from "aws-cdk-lib";
-import {
-  InterfaceVpcEndpointAwsService,
-  IpAddresses,
-  SubnetType,
-  Vpc,
-} from "aws-cdk-lib/aws-ec2";
+import { IpAddresses, SubnetType, Vpc } from "aws-cdk-lib/aws-ec2";
 
 export interface VpcProps extends StackProps {
   maxAzs: number;
@@ -36,10 +31,6 @@ export class VPCStack extends Stack {
           subnetType: SubnetType.PRIVATE_ISOLATED,
         },
       ],
-    });
-
-    this.vpc.addInterfaceEndpoint("SecretsManagerEndpoint", {
-      service: InterfaceVpcEndpointAwsService.SECRETS_MANAGER,
     });
   }
 }
