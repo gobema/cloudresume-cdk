@@ -26,7 +26,7 @@ export class RdsServerlessStack extends Stack {
     const dbUser = this.node.tryGetContext("dbUser") as string;
 
     this.dbSecret = new Secret(this, "dbCredentialsSecret", {
-      secretName: "test/snippetbox/aurora",
+      secretName: "snippetbox/aurora",
       generateSecretString: {
         secretStringTemplate: JSON.stringify({
           username: dbUser,
