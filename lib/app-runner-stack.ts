@@ -60,6 +60,7 @@ export class AppRunnerStack extends Stack {
     Duration.seconds(30);
 
     this.customDomain(subDomain, serv.serviceArn, props.hostedZone);
+    this.certValidation(serv.serviceArn, props.hostedZone);
   }
 
   customDomain(subdomain: string, serviceArn: string, hostedZone: HostedZone) {
@@ -86,6 +87,33 @@ export class AppRunnerStack extends Stack {
       serviceToken: provider.serviceToken,
       properties: {
         subdomain,
+        serviceArn,
+        hostedZoneId: hostedZone.hostedZoneId,
+      },
+    });
+  }
+
+  certValidation(serviceArn: string, hostedZone: HostedZone) {
+    const provider = new custom_resources.Provider(this, "ProviderCert", {
+      onEventHandler: new aws_lambda_nodejs.NodejsFunction(
+        this,
+        "CertValidation",
+        {
+          initialPolicy: [
+            new PolicyStatement({
+              actions: [
+                "route53:changeResourceRecordSets",
+                "apprunner:DescribeCustomDomains",
+              ],
+              resources: ["*"],
+            }),
+          ],
+        },
+      ),
+    });
+    new CustomResource(this, "CustomResourceCert", {
+      serviceToken: provider.serviceToken,
+      properties: {
         serviceArn,
         hostedZoneId: hostedZone.hostedZoneId,
       },
